@@ -1,79 +1,47 @@
+import React from 'react';
 import {useState, useEffect} from "react";
 const hexColors = ['#FF5733', '#3498DB', '#27AE60'];
 const currentColor = '#FF5733';
 
-const message = '0123456789ABCDEF'  //0 - 15
+const hexList = '0123456789ABCDEF'  //0 - 15
 
-//#123456
+const message = 'Вы угадали цвет! / Вы не угадали цвет!'
+
 
 function generateRandomColor () {
   let colorString = '#';
-  for ( let i = 0; i < 6; i++ ) {
-    // colorString += message[Math.floor( Math.random() * ( message.length - 1 ) - 0 ) - 0]; // 0 0.9
-    const random = Math.floor( Math.random() * 16 )
-    console.log( `Game/Game.jsx - line: 14 ->> random`, random )
-    const symbol = message[random];
-    console.log( `Game/Game.jsx - line: 16 ->> symbol`, symbol )
-    colorString += symbol; // 0 0.9
-    // console.log( `Game/Game.jsx - line: 14 ->> Math.ceil( Math.random() * 16 `, Math.ceil( Math.random() * 16 )  )
-
-  }
-  console.log( colorString );
+  
+  
   return colorString;
 }
 
 
 const Game = () => {
-  const [currentColor, setCurrentColor] = useState( '' );
-  const [hexColors, setHexColors] = useState( [] );
-  const [message, setMessage] = useState( '' );
-
-  // generateRandomColor()
-
-  const generateColors = () => {
-    const newColor = generateRandomColor();
-    setCurrentColor( newColor );
-
-    const newHexColors = Array.from( {length: 3}, () => generateRandomColor() );
-
-    newHexColors[Math.floor( Math.random() * 3 )] = newColor;
-
-    setHexColors( newHexColors );
-  };
 
   useEffect( () => {
-    generateColors();
   }, [] );
 
   const handleColorClick = ( color ) => {
-    if ( color === currentColor ) {
-      setMessage( "Вы угадали цвет!" );
-    } else {
-      setMessage( "Вы не угадали" );
-    }
+
   }
 
-  const handleNewButtonClick = () => {
-    generateColors();
+  const handleNewGameButtonClick = () => {
+
   }
 
   //TODO 
   /**
     *
-    * states
+    * 1) states
     * 
     * currentColor
     * hexColors
-    * messag
+    * message   "Вы угадали цвет!" : 
     * 
-    * helper
+    * 2) helper generateColors
     * 
-    * generateColors
+    * 3) useEffect
     * 
-    * 
-    * useEffect
-    * 
-    * states
     * 
     * 
     **/
@@ -102,7 +70,7 @@ const Game = () => {
         ) )}
       </div>
       <p>{message}</p>
-      <button onClick={handleNewButtonClick}>New Game</button>
+      <button onClick={handleNewGameButtonClick}>New Game</button>
     </div> );
 };
 
