@@ -7,26 +7,63 @@ const hexList = '0123456789ABCDEF'  //0 - 15
 
 const message = 'Вы угадали цвет! / Вы не угадали цвет!'
 
-
 function generateRandomColor () {
   let colorString = '#';
   
+  for ( let i = 0; i < 6; i++ ){
+    
+    const index = Math.floor( Math.random() * 16 );
+    const symbol = hexList[index]; 
+     
+    colorString += symbol
+  }
+  console.log(colorString);
   
   return colorString;
+}
+
+function generateColorArray () {
+  let colorArray = [];
+  
+  for ( let i = 0; i < 3; i++ ) {
+      const color = generateRandomColor();
+      colorArray.push( color );
+  }
+  
+  return colorArray;
 }
 
 
 const Game = () => {
 
+  const colorArray = generateColorArray();
+
+  const [currentColor, setCurrentColor] = useState(colorArray[Math.floor(Math.random() * 3)]);
+  const [hexColor, setHexColor] = useState(colorArray);
+  const [message, setMessage] = useState( '' );
+  
+  const successMessage = "You choose right color!";
+  const failMessage = "You choose wrong color!";
+
+  console.log( 'currentColor', currentColor );
+  console.log(`Game/Game.jsx - line: 53 ->> hexColor`, hexColor)
+
   useEffect( () => {
   }, [] );
 
   const handleColorClick = ( color ) => {
-
+    if (currentColor === color) {
+      setMessage(successMessage);
+    } else {
+      setMessage(failMessage);
+    }
   }
 
   const handleNewGameButtonClick = () => {
-
+    const colorArray = generateColorArray();
+    setCurrentColor(colorArray[Math.floor(Math.random() * 3)]);
+    setHexColor(colorArray);
+    setMessage('');
   }
 
   //TODO 
@@ -51,7 +88,7 @@ const Game = () => {
       <h1>Guess the Color</h1>
       <div style={{width: 300, height: 200, backgroundColor: currentColor, margin: '0 auto', marginBottom: 20}} />
       <div>
-        {hexColors.map( ( color, index ) => (
+        {hexColor.map( ( color, index ) => (
           <div
             key={index}
             style={{
