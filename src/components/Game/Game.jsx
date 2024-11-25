@@ -1,79 +1,84 @@
+import React from 'react';
 import {useState, useEffect} from "react";
 const hexColors = ['#FF5733', '#3498DB', '#27AE60'];
 const currentColor = '#FF5733';
 
-const message = '0123456789ABCDEF'  //0 - 15
+const hexList = '0123456789ABCDEF'  //0 - 15
 
-//#123456
+const message = 'Вы угадали цвет! / Вы не угадали цвет!'
 
 function generateRandomColor () {
   let colorString = '#';
-  for ( let i = 0; i < 6; i++ ) {
-    // colorString += message[Math.floor( Math.random() * ( message.length - 1 ) - 0 ) - 0]; // 0 0.9
-    const random = Math.floor( Math.random() * 16 )
-    console.log( `Game/Game.jsx - line: 14 ->> random`, random )
-    const symbol = message[random];
-    console.log( `Game/Game.jsx - line: 16 ->> symbol`, symbol )
-    colorString += symbol; // 0 0.9
-    // console.log( `Game/Game.jsx - line: 14 ->> Math.ceil( Math.random() * 16 `, Math.ceil( Math.random() * 16 )  )
-
+  
+  for ( let i = 0; i < 6; i++ ){
+    
+    const index = Math.floor( Math.random() * 16 );
+    const symbol = hexList[index]; 
+     
+    colorString += symbol
   }
-  console.log( colorString );
+  console.log(colorString);
+  
   return colorString;
+}
+
+function generateColorArray () {
+  let colorArray = [];
+  
+  for ( let i = 0; i < 3; i++ ) {
+      const color = generateRandomColor();
+      colorArray.push( color );
+  }
+  
+  return colorArray;
 }
 
 
 const Game = () => {
-  const [currentColor, setCurrentColor] = useState( '' );
-  const [hexColors, setHexColors] = useState( [] );
+
+  const colorArray = generateColorArray();
+
+  const [currentColor, setCurrentColor] = useState(colorArray[Math.floor(Math.random() * 3)]);
+  const [hexColor, setHexColor] = useState(colorArray);
   const [message, setMessage] = useState( '' );
+  
+  const successMessage = "You choose right color!";
+  const failMessage = "You choose wrong color!";
 
-  // generateRandomColor()
-
-  const generateColors = () => {
-    const newColor = generateRandomColor();
-    setCurrentColor( newColor );
-
-    const newHexColors = Array.from( {length: 3}, () => generateRandomColor() );
-
-    newHexColors[Math.floor( Math.random() * 3 )] = newColor;
-
-    setHexColors( newHexColors );
-  };
+  console.log( 'currentColor', currentColor );
+  console.log(`Game/Game.jsx - line: 53 ->> hexColor`, hexColor)
 
   useEffect( () => {
-    generateColors();
   }, [] );
 
   const handleColorClick = ( color ) => {
-    if ( color === currentColor ) {
-      setMessage( "Вы угадали цвет!" );
+    if (currentColor === color) {
+      setMessage(successMessage);
     } else {
-      setMessage( "Вы не угадали" );
+      setMessage(failMessage);
     }
   }
 
-  const handleNewButtonClick = () => {
-    generateColors();
+  const handleNewGameButtonClick = () => {
+    const colorArray = generateColorArray();
+    setCurrentColor(colorArray[Math.floor(Math.random() * 3)]);
+    setHexColor(colorArray);
+    setMessage('');
   }
 
   //TODO 
   /**
     *
-    * states
+    * 1) states
     * 
     * currentColor
     * hexColors
-    * messag
+    * message   "Вы угадали цвет!" : 
     * 
-    * helper
+    * 2) helper generateColors
     * 
-    * generateColors
+    * 3) useEffect
     * 
-    * 
-    * useEffect
-    * 
-    * states
     * 
     * 
     **/
@@ -83,7 +88,7 @@ const Game = () => {
       <h1>Guess the Color</h1>
       <div style={{width: 300, height: 200, backgroundColor: currentColor, margin: '0 auto', marginBottom: 20}} />
       <div>
-        {hexColors.map( ( color, index ) => (
+        {hexColor.map( ( color, index ) => (
           <div
             key={index}
             style={{
@@ -102,7 +107,7 @@ const Game = () => {
         ) )}
       </div>
       <p>{message}</p>
-      <button onClick={handleNewButtonClick}>New Game</button>
+      <button onClick={handleNewGameButtonClick}>New Game</button>
     </div> );
 };
 
